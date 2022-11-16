@@ -1,7 +1,7 @@
 const postData = [
     {
-        title: "",
-        content: "",
+        title: "Dog Dancing",
+        content: "Dog",
         id: "1234",
     },
 ]
