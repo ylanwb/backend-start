@@ -1,5 +1,6 @@
 const express = require("express");
 const users = require("./controller/users.js");
+const posts = require("./controller/posts")
 
 const port = 6666;
 const app = express();
@@ -14,6 +15,7 @@ app.use(
 );
 
 app.use("/users", users);
+app.use("/posts", posts);
 
 app.listen(port, () => {
   `Server is running at localhost:${port}s`;
