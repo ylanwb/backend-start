@@ -1,7 +1,7 @@
 // const { Router, response } = require("express"); // --> unused!!!
-const data = require("../postsDummyData");
+const data = require("../db/postsData");
 // const express = express.Router; // --> why doubled??
-console.log(data)
+// console.log(data);
 
 // Firstly you need export expressjs
 const express = require("express");

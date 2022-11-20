@@ -1,19 +1,4 @@
-const postData = [
-    {
-      title: "",
-      content: "",
-      id: "123123",
-    },
-  ];
-  const commentData = [
-    {
-      userId: "",
-      commentText: "",
-      commentId: "",
-      postId: "123124",
-    },
-  ];
-  const postDummy = [
+const postsData = [
     {
       id: 10765456789,
       title: "The Ultimate Guide To NODE JS",
@@ -45,3 +30,4 @@ const postData = [
         "She could hear him in the shower singing with a joy she hoped he'd retain after she delivered the news.",
     },
   ];
+  module.exports = postsData;
