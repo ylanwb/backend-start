@@ -6,7 +6,7 @@ const { v4: uuidv4 } = require("uuid");
 
 router.get("/", (request, response) => {
   if (data) {
-    response.send().status(200).json(data);
+    response.send("this is users get").status(200).json(data);
   } else {
     response
       .send()

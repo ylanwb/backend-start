@@ -1,6 +1,7 @@
 // const { Router, response } = require("express"); // --> unused!!!
-const data = require("../postDummyData");
+const data = require("../postsDummyData");
 // const express = express.Router; // --> why doubled??
+console.log(data)
 
 // Firstly you need export expressjs
 const express = require("express");
@@ -12,7 +13,7 @@ const { v4: uuidv4 } = require("uuid"); // --> you need install uuid
 
 router.get("/", (request, response) => {
   if (data) {
-    response.send().json(data);
+    response.send("this is posts get").json(data);
   } else {
     response
       .send()
@@ -28,7 +29,7 @@ router.put("/:id", (request, response) => {
     response.send().status(400).json({ errorMessage: "Bad Request" });
   }
   // const { title, content } = request.body; // --> unused
-  const found = data.find((object) => object.id === Number(id));
+  const found = data.find((object) => object.id === id);
   // }); // --> you are closed function here!! its wrong you need close it fater all logic
   if (!found) {
     response
@@ -44,7 +45,7 @@ router.put("/:id", (request, response) => {
 router.post("/", (request, response) => {
   const body = request.body;
   if (!body.content || !body.title) {
-    response.status(400), json({ errorMessage: "Title and content required " });
+    response.status(400).json({ errorMessage: "Title and content required " });
   } else {
     const newUser = { ...body, id: uuidv4() };
     response.send(newUser).status(200).statusCode(200);
@@ -54,12 +55,13 @@ router.post("/", (request, response) => {
 router.delete("/:id", (request, response) => {
   const { id } = request.params;
   // }); // -- > why close function before write logic side?
+  const found = data.find((object) => object.id === id);
   if (!found) {
     response
       .status(404)
       .json({ message: "The post with the specified ID does not exist." });
   } else if (found) {
-    const filteredData = data.filter((object) => object.id !== Number(id));
+    const filteredData = data.filter((object) => object.id !== id);
     response.status(200).json({ users: filteredData });
   }
 }); // you need close function here!!
