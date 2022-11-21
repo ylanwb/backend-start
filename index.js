@@ -1,5 +1,5 @@
 const parser = require("body-parser");
-const posts = require("./controller/posts");
+const posts = require("./controller/posts/posts");
 const users = require("./controller/users/users")
 const express = require("express");
 const connect = require("./mongoDb/db");

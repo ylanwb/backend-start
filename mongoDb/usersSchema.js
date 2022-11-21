@@ -10,6 +10,6 @@ const UserScheme = new Schema ({
     dateOfBirth: Date,
 })
 
-const UserModel = model("User", UserScheme);
+const User = model("User", UserScheme);
 
-module.exports = UserModel;
+module.exports = User;

@@ -24,6 +24,5 @@ const validateUserBody = async (request, response, next) => {
     return response.status(500).json({ message: err });
   }
 };
-const validateUserUpdate = async (request, response, next) => {};
 
 module.exports = { validateUserId, validateUserBody };
