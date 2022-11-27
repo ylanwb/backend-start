@@ -26,7 +26,7 @@ router.get("/:userId", validateUserId, async (request, response) => {
   }
 });
 
-router.post("/", validateUserBody, async (request, response) => {
+router.post("/", async (request, response) => {
   const body = request.body;
   try {
     const createdUser = await User.create({ ...body });

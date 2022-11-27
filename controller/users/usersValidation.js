@@ -14,11 +14,14 @@ const validateUserId = async (request, response, next) => {
   }
 };
 const validateUserBody = async (request, response, next) => {
-  const body = request.body;
+  const { firstName, lastName } = request.body;
   try {
-    const createdUser = await User.create({ ...body });
-    if (createdUser) {
-      return response.status(201).json(createdUser);
+    if (!firstName || !lastName) {
+      return response
+        .status(403)
+        .json({ message: "Please provide firstName and lastName" });
+    } else {
+      next();
     }
   } catch (err) {
     return response.status(500).json({ message: err });

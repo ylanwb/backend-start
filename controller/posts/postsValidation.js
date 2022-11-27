@@ -1,4 +1,5 @@
 const Post = require("../../mongoDb/postsSchema");
+const User = require("../../mongoDb/usersSchema");
 
 const validatePostId = async (request, response, next) => {
   const { postId } = request.params;
@@ -14,11 +15,15 @@ const validatePostId = async (request, response, next) => {
   }
 };
 const validatePostBody = async (request, response, next) => {
-  const body = request.body;
+  const { title, content, userId } = request.body;
+  console.log(userId)
   try {
-    const createdPost = await Post.create({ ...body });
-    if (createdPost) {
-      return response.status(201).json(createdPost);
+    if (!title || !content || !userId) {
+      return response
+        .status(403)
+        .json({ message: "Please provide title, content and userId." });
+    } else {
+      next()
     }
   } catch (err) {
     return response.status(500).json({ message: err });

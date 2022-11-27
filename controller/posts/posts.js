@@ -5,6 +5,8 @@ const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 const { validatePostId, validatePostBody } = require("./postsValidation");
 const Post = require("../../mongoDb/postsSchema");
+const User = require("../../mongoDb/usersSchema");
+
 
 router.get("/", async (request, response) => {
   const posts = Post.find({}, (err, allPosts) => {
@@ -27,9 +29,10 @@ router.get("/:postId", validatePostId, async (request, response) => {
 });
 
 router.post("/", validatePostBody, async (request, response) => {
-  const body = request.body;
+  const { title, content, userId } = request.body;
   try {
-    const createdPost = await Post.create({ ...body });
+    const user = await User.findById(userId)
+    const createdPost = await Post.create({ title: title, content: content, owner: user });
     return response.status(201).json(createdPost);
   } catch (err) {
     return response.status(500).json({ message: `${err} is the error` });
@@ -41,11 +44,12 @@ router.put("/:postId", validatePostId, async (request, response) => {
   const body = request.body;
   // firstName, lastName
   try {
-    await Post.findByIdAndUpdate({ _id: postId }, body, request.newData
-    );
-    return response.status(202).json({ message: "successfully updated the post" })
+    await Post.findByIdAndUpdate({ _id: postId }, body, request.newData);
+    return response
+      .status(202)
+      .json({ message: "successfully updated the post" });
   } catch (err) {
-    return response.status(500).json({ message: err })
+    return response.status(500).json({ message: err });
   }
 });
 router.delete("/:postId", validatePostId, async (request, response) => {
@@ -60,4 +64,4 @@ router.delete("/:postId", validatePostId, async (request, response) => {
   }
 }),
   (module.exports = router);
-``
+``;
