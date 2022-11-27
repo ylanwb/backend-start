@@ -1,11 +1,10 @@
-const data = require("../../db/postsData");
 const express = require("express");
-const e = require("express");
-const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 const { validatePostId, validatePostBody } = require("./postsValidation");
 const Post = require("../../mongoDb/postsSchema");
 const User = require("../../mongoDb/usersSchema");
+const date = require('date-and-time')
+const router = express.Router();
 
 
 router.get("/", async (request, response) => {
@@ -29,10 +28,12 @@ router.get("/:postId", validatePostId, async (request, response) => {
 });
 
 router.post("/", validatePostBody, async (request, response) => {
-  const { title, content, userId } = request.body;
+  const { title, content, userId, image } = request.body;
+  const now  =  new Date();
+  const value = date.format(now,'YYYY/MM/DD h:MM:ss');
   try {
     const user = await User.findById(userId)
-    const createdPost = await Post.create({ title: title, content: content, owner: user });
+    const createdPost = await Post.create({ title: title, content: content, owner: user, image: image, publishDate: value });
     return response.status(201).json(createdPost);
   } catch (err) {
     return response.status(500).json({ message: `${err} is the error` });

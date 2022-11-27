@@ -1,10 +1,10 @@
-const data = require("../../db/usersData");
 const express = require("express");
 const e = require("express");
 const router = express.Router();
 const { v4: uuidv4 } = require("uuid");
 const User = require("../../mongoDb/usersSchema");
 const { validateUserId, validateUserBody } = require("./usersValidation");
+const date = require('date-and-time')
 
 router.get("/", async (request, response) => {
   const users = User.find({}, (err, allUsers) => {
@@ -27,9 +27,11 @@ router.get("/:userId", validateUserId, async (request, response) => {
 });
 
 router.post("/", async (request, response) => {
-  const body = request.body;
+  const { firstName, lastName, email } = request.body;
+  const now  =  new Date();
+  const value = date.format(now,'YYYY/MM/DD h:MM:ss');
   try {
-    const createdUser = await User.create({ ...body });
+    const createdUser = await User.create({ firstName: firstName, lastName: lastName, email: email, registerDate: value});
     return response.status(201).json(createdUser);
   } catch (err) {
     return response.status(500).json({ message: `${err} is the error` });

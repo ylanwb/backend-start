@@ -1,6 +1,7 @@
 const parser = require("body-parser");
 const posts = require("./controller/posts/posts");
 const users = require("./controller/users/users")
+const comments = require("./controller/comments/comments")
 const express = require("express");
 const connect = require("./mongoDb/db");
 
@@ -14,6 +15,7 @@ connect()
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }));
 
+app.use("/comments", comments);
 app.use("/posts", posts);
 app.use("/users", users)
 

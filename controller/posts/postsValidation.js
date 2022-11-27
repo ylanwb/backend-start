@@ -15,13 +15,13 @@ const validatePostId = async (request, response, next) => {
   }
 };
 const validatePostBody = async (request, response, next) => {
-  const { title, content, userId } = request.body;
+  const { title, content, userId, image } = request.body;
   console.log(userId)
   try {
-    if (!title || !content || !userId) {
+    if (!title || !content || !userId || !image) {
       return response
         .status(403)
-        .json({ message: "Please provide title, content and userId." });
+        .json({ message: "Please provide title, content, image and userId." });
     } else {
       next()
     }
