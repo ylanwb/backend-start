@@ -1,23 +1,18 @@
-const express = require("express");
-const { v4: uuidv4 } = require("uuid");
-const { validatePostId, validatePostBody } = require("./postsValidation");
-const Post = require("../../mongoDb/postsSchema");
-const User = require("../../mongoDb/usersSchema");
+const Post = require("../../models/postsSchema");
+const User = require("../../models/usersSchema");
 const date = require('date-and-time')
-const router = express.Router();
 
-
-router.get("/", async (request, response) => {
+exports.getPosts = async (request, response) => {
   const posts = Post.find({}, (err, allPosts) => {
     if (err) {
       response.status(500).json({ message: "Can't retrieve the posts" });
     }
     response.status(200).json(allPosts);
-  });
+  })
   console.log(posts);
-});
+};
 
-router.get("/:postId", validatePostId, async (request, response) => {
+exports.getPost = async (request, response) => {
   const { postId } = request.params;
   try {
     const post = await Post.findById(postId);
@@ -25,9 +20,9 @@ router.get("/:postId", validatePostId, async (request, response) => {
   } catch (err) {
     response.status(500).json({ error: err });
   }
-});
+};
 
-router.post("/", validatePostBody, async (request, response) => {
+exports.createPost = async (request, response) => {
   const { title, content, userId, image } = request.body;
   const now  =  new Date();
   const value = date.format(now,'YYYY/MM/DD h:MM:ss');
@@ -38,12 +33,10 @@ router.post("/", validatePostBody, async (request, response) => {
   } catch (err) {
     return response.status(500).json({ message: `${err} is the error` });
   }
-});
-router.put("/:postId", validatePostId, async (request, response) => {
+};
+exports.updatePost = async (request, response) => {
   const { postId } = request.params;
-  // 637aa822e771be7f25f245ac
   const body = request.body;
-  // firstName, lastName
   try {
     await Post.findByIdAndUpdate({ _id: postId }, body, request.newData);
     return response
@@ -52,8 +45,8 @@ router.put("/:postId", validatePostId, async (request, response) => {
   } catch (err) {
     return response.status(500).json({ message: err });
   }
-});
-router.delete("/:postId", validatePostId, async (request, response) => {
+};
+exports.deletePost = async (request, response) => {
   const { postId } = request.params;
   try {
     await Post.findByIdAndRemove({ _id: postId });
@@ -63,6 +56,4 @@ router.delete("/:postId", validatePostId, async (request, response) => {
   } catch (err) {
     return response.status(500).json({ message: err });
   }
-}),
-  (module.exports = router);
-``;
+}

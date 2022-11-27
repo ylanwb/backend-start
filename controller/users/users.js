@@ -1,12 +1,7 @@
-const express = require("express");
-const e = require("express");
-const router = express.Router();
-const { v4: uuidv4 } = require("uuid");
-const User = require("../../mongoDb/usersSchema");
-const { validateUserId, validateUserBody } = require("./usersValidation");
-const date = require('date-and-time')
+const User = require("../../models/usersSchema");
+const date = require("date-and-time");
 
-router.get("/", async (request, response) => {
+exports.getUsers = async (request, response) => {
   const users = User.find({}, (err, allUsers) => {
     if (err) {
       response.status(500).json({ message: "Can't retrieve the users" });
@@ -14,9 +9,9 @@ router.get("/", async (request, response) => {
     response.status(200).json(allUsers);
   });
   console.log(users);
-});
+};
 
-router.get("/:userId", validateUserId, async (request, response) => {
+exports.getUser = async (request, response) => {
   const { userId } = request.params;
   try {
     const user = await User.findById(userId);
@@ -24,33 +19,37 @@ router.get("/:userId", validateUserId, async (request, response) => {
   } catch (err) {
     response.status(500).json({ error: err });
   }
-});
+};
 
-router.post("/", async (request, response) => {
+exports.createUser = async (request, response) => {
   const { firstName, lastName, email } = request.body;
-  const now  =  new Date();
-  const value = date.format(now,'YYYY/MM/DD h:MM:ss');
+  const now = new Date();
+  const value = date.format(now, "YYYY/MM/DD h:MM:ss");
   try {
-    const createdUser = await User.create({ firstName: firstName, lastName: lastName, email: email, registerDate: value});
+    const createdUser = await User.create({
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      registerDate: value,
+    });
     return response.status(201).json(createdUser);
   } catch (err) {
     return response.status(500).json({ message: `${err} is the error` });
   }
-});
-router.put("/:userId", validateUserId, async (request, response) => {
+};
+exports.updateUser = async (request, response) => {
   const { userId } = request.params;
-  // 637aa822e771be7f25f245ac
   const body = request.body;
-  // firstName, lastName
   try {
-    await User.findByIdAndUpdate({ _id: userId }, body, request.newData
-    );
-    return response.status(202).json({ message: "successfully updated the user" })
+    await User.findByIdAndUpdate({ _id: userId }, body, request.newData);
+    return response
+      .status(202)
+      .json({ message: "successfully updated the user" });
   } catch (err) {
-    return response.status(500).json({ message: err })
+    return response.status(500).json({ message: err });
   }
-});
-router.delete("/:userId", validateUserId, async (request, response) => {
+};
+exports.deleteUser = async (request, response) => {
   const { userId } = request.params;
   try {
     await User.findByIdAndRemove({ _id: userId });
@@ -60,5 +59,4 @@ router.delete("/:userId", validateUserId, async (request, response) => {
   } catch (err) {
     return response.status(500).json({ message: err });
   }
-}),
-  (module.exports = router);
+};
