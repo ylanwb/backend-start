@@ -16,7 +16,7 @@ exports.getComments = async (request, response) => {
 exports.getComment = async (request, response) => {
   const { commentId } = request.params;
   try {
-    const comment = await Comment.findById(commentId);
+    const comment = await Comment.findById(commentId).populate("post").populate("owner");
     response.status(200).json(comment);
   } catch (err) {
     response.status(500).json({ error: err });

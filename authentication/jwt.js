@@ -16,6 +16,7 @@ module.exports.tokenGenerate = (firstName, userId) => {
 // verify the token
 module.exports.checkToken = async (req, response, next) => {
   const token = req.headers.authorization;
+  console.log(token.split(" ")[1]);
   if (!token) {
     response.status(401).json({ message: "No authorization token provided!" });
     return;

@@ -1,6 +1,8 @@
 const parser = require("body-parser");
 const posts = require("./router/posts");
 const users = require("./router/users");
+const register = require("./router/register")
+const login = require("./router/login")
 const comments = require("./router/comments");
 const express = require("express");
 const connect = require("./db/db");
@@ -15,6 +17,8 @@ connect();
 app.use(parser.json());
 app.use(parser.urlencoded({ extended: true }));
 
+app.use(register)
+app.use(login)
 app.use("/comments", comments);
 app.use("/posts", posts);
 app.use("/users", users);

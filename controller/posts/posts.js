@@ -27,8 +27,8 @@ exports.createPost = async (request, response) => {
   const now  =  new Date();
   const value = date.format(now,'YYYY/MM/DD h:MM:ss');
   try {
-    const user = await User.findById(userId)
-    const createdPost = await Post.create({ title: title, content: content, owner: user, image: image, publishDate: value });
+    // const user = await User.findById(userId)
+    const createdPost = await Post.create({ title: title, content: content, owner: userId, image: image, publishDate: value });
     return response.status(201).json(createdPost);
   } catch (err) {
     return response.status(500).json({ message: `${err} is the error` });

@@ -22,6 +22,11 @@ const UserScheme = new Schema({
   picture: String,
   dateOfBirth: Date,
   registerDate: Date,
+  password: {
+    type: String,
+    required: [true, "password is required"],
+    minLength: [8, "Password must be at least 8 characters"],
+  },
 });
 
 UserScheme.path("email").validate((email) => {

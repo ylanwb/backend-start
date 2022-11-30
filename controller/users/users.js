@@ -1,5 +1,7 @@
 const User = require("../../models/usersSchema");
+const Post = require("../../models/postsSchema");
 const date = require("date-and-time");
+const { hashFunction } = require("../../bcrypt/bcrypt");
 
 exports.getUsers = async (request, response) => {
   const users = User.find({}, (err, allUsers) => {
@@ -14,7 +16,8 @@ exports.getUsers = async (request, response) => {
 exports.getUser = async (request, response) => {
   const { userId } = request.params;
   try {
-    const user = await User.findById(userId);
+    const userPosts = await Post.find({ owner: userId })
+    const user = await User.findById(userId)
     response.status(200).json(user);
   } catch (err) {
     response.status(500).json({ error: err });
@@ -22,15 +25,17 @@ exports.getUser = async (request, response) => {
 };
 
 exports.createUser = async (request, response) => {
-  const { firstName, lastName, email } = request.body;
+  const { firstName, lastName, email, password } = request.body;
   const now = new Date();
   const value = date.format(now, "YYYY/MM/DD h:MM:ss");
+  const hashedPassword = hashFunction(password);
   try {
     const createdUser = await User.create({
       firstName: firstName,
       lastName: lastName,
       email: email,
       registerDate: value,
+      password: hashedPassword,
     });
     return response.status(201).json(createdUser);
   } catch (err) {
