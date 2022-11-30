@@ -17,8 +17,9 @@ exports.getUser = async (request, response) => {
   const { userId } = request.params;
   try {
     const userPosts = await Post.find({ owner: userId })
-    const user = await User.findById(userId)
-    response.status(200).json(user);
+    const userInfo = await User.findById(userId)
+    const userPostCombined = userPosts
+    response.status(200).json();
   } catch (err) {
     response.status(500).json({ error: err });
   }
