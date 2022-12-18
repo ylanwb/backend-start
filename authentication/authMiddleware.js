@@ -25,10 +25,10 @@ module.exports.authRegister = async (req, res, next) => {
 
 // login with jwt
 module.exports.authLoginWithJwt = async (req, res) => {
-  const { firstName, password } = req.body;
-  const user = await User.findOne({ firstName });
+  const { email, password } = req.body;
+
+  const user = await User.findOne({ email });
   const isPasswordMatch = compareHash(password, user.password);
-  console.log(isPasswordMatch);
   if (!user) {
     return res.status(404).json({
       success: false,
@@ -41,12 +41,11 @@ module.exports.authLoginWithJwt = async (req, res) => {
       message: "Invalid password",
     });
   }
-
-  const token = tokenGenerate(firstName, user._id);
+  const token = tokenGenerate(email, user._id);
   return res.status(200).json({
     success: true,
     data: {
-      firstName: user.firstName,
+      email: user.email,
       token: token,
     },
   });

@@ -33,7 +33,7 @@ exports.createUser = async (request, response) => {
   try {
     const createdUser = await User.create({
       firstName: firstName,
-      lastName: lastName,
+      // lastName: lastName,
       email: email,
       registerDate: value,
       password: hashedPassword,
