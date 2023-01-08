@@ -15,13 +15,22 @@ exports.getUsers = async (request, response) => {
 
 exports.getUser = async (request, response) => {
   const { userId } = request.params;
-  try {
-    const userPosts = await Post.find({ owner: userId })
-    const postComments = await Post.find({ co: userId })
-    const userInfo = await User.findById(userId)
-    response.status(200).json(userPosts);
+  try { 
+    const userInfo = await User.findById(userId);
+    response.status(200).json(userInfo);
   } catch (err) {
     response.status(500).json({ error: err });
+  }
+};
+
+exports.getUserPosts = async (request, response) => {
+  const { userId } = request.params;
+  try {
+    Post.find({ owner: userId }, (err, allPosts) => {
+      response.status(200).json(allPosts);
+    });
+  } catch (err) {
+    return response.status(500).json({ message: "Can't retrieve the posts" });
   }
 };
 

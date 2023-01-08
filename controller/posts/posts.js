@@ -1,15 +1,14 @@
 const Post = require("../../models/postsSchema");
 const User = require("../../models/usersSchema");
-const date = require('date-and-time')
+const date = require("date-and-time");
 
 exports.getPosts = async (request, response) => {
-  const posts = Post.find({}, (err, allPosts) => {
+  Post.find({}, (err, allPosts) => {
     if (err) {
       response.status(500).json({ message: "Can't retrieve the posts" });
     }
     response.status(200).json(allPosts);
-  })
-  console.log(posts);
+  });
 };
 
 exports.getPost = async (request, response) => {
@@ -24,11 +23,17 @@ exports.getPost = async (request, response) => {
 
 exports.createPost = async (request, response) => {
   const { title, content, userId, image } = request.body;
-  const now  =  new Date();
-  const value = date.format(now,'YYYY/MM/DD h:MM:ss');
+  const now = new Date();
+  const value = date.format(now, "YYYY/MM/DD h:MM:ss");
   try {
     // const user = await User.findById(userId)
-    const createdPost = await Post.create({ title: title, content: content, owner: userId, image: image, publishDate: value });
+    const createdPost = await Post.create({
+      title: title,
+      content: content,
+      owner: userId,
+      image: image,
+      publishDate: value,
+    });
     return response.status(201).json(createdPost);
   } catch (err) {
     return response.status(500).json({ message: `${err} is the error` });
@@ -56,4 +61,4 @@ exports.deletePost = async (request, response) => {
   } catch (err) {
     return response.status(500).json({ message: err });
   }
-}
+};
