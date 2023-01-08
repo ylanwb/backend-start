@@ -25,7 +25,7 @@ module.exports.authRegister = async (req, res, next) => {
 
 // login with jwt
 module.exports.authLoginWithJwt = async (req, res) => {
-  const { email, password } = req.body;
+  const { email, password, id } = req.body;
 
   const user = await User.findOne({ email });
   const isPasswordMatch = compareHash(password, user.password);
@@ -47,6 +47,7 @@ module.exports.authLoginWithJwt = async (req, res) => {
     data: {
       email: user.email,
       token: token,
+      id: user._id
     },
   });
 };
